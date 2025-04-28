@@ -8,7 +8,7 @@ import time
 
 
 
-def get_player_data(username=None):
+def get_player_data(username=None, maximize=False):
     if not username: 
         print("Invalid username")
         return None
@@ -20,7 +20,8 @@ def get_player_data(username=None):
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # less detection
     
     driver = webdriver.Chrome(options=chrome_options) # Chrome isntance to scrape the data (Can't just use requests - Get status code 403 even with headers)
-    driver.minimize_window() # Can't scrape it in headerless, so just minimize the window when it opens lol
+    if not maximize:
+        driver.minimize_window() # Can't scrape it in headerless, so just minimize the window when it opens lol
 
     try:
         driver.get(url)
@@ -51,8 +52,11 @@ def get_player_data(username=None):
         driver.quit() # close the webbrowser instance
 
 # Function to get data about the user, such as ID, etc.
-#category: platformInfo, userInfo, metadata
-def get_player_info(profile_data, category=None, data=None, value=None):
+def get_player_info(profile_data, category=None, data=None, value=None):    
+    if not profile_data: # If that isn't a valid category, return None
+        print(f"No profile data found.")
+        return None
+    
     category_data = profile_data.get(category, []) #Get the data in the category
     if not category_data: # If that isn't a valid category, return None
         print(f"No category '{category}' found.")
@@ -69,10 +73,9 @@ def get_player_info(profile_data, category=None, data=None, value=None):
     
     return category_values[value] #return the value chosen.
 
-
 # Function to return the value of a specific stat given the platform, gamemode, stat, and option of that stat
 def get_player_stats(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode=None, data=None, option=None):
-    
+    if not profile_data: return None
    # If you want to get only the stats for the user's preferred platform, use preferred for the platform parameter in the funtcion call
     if platform == "preferred":
         platform = profile_data["metadata"]["preferredInputId"]
@@ -90,7 +93,7 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
             break
 
     if not target_section: # If there aren't any sections for the fiven platform, print a message saying so and retunr
-        print(f"No stats found for platform = {platform}")
+        print(f"No stats found for platform = {platform}, season = {season}, isCompetitive? = {ranked}")
         return None
 
 
@@ -119,40 +122,7 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
 
     return
 
-
-# Category: stats (default), last7DaysStats, last30DaysStats
-
-# platform: None, "all", "touch", "kbm", "gamepad", "preferred"
-# gamemode: "all", "solo", "duos", "trios", "squads", "ltm"
-
-# Stats:
-# For "all" gamemode: 
-#   "TRNRating", "Score", "Top1", "Top3", "Top5", "Top6", "Top10", "Top12", "Top25", "KD", "WinRatio", "Matches", "Kills", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMatch", "ScorePerMin"
-# For "solo", "duos", "trios", "squads", "ltm" gamemodes:
-#   "Score", "Top1", "KD", "WinRatio", "Matches", "Kills", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMatch", "ScorePerMin", "Top3_5_10", "TRNRating"
-
-# OPTIONS FOR STATS BASED ON GAMEMODE AND STAT.
-
-# STAT: KD, WinRatio, MinutesPlayed, KPM, KPG, AvgTimePlayed, ScorePerMin
-# VALUE:  value, percentile, displayValue
-
-# STAT: Score, Top1, Top3, Top6, Top10, Top12, Top25, Matches, Kills, ScorePerMatch
-# VALUE:  value, percentile, rank, displayValue
-
-# STAT: TRNRating, 
-# VALUE:  value, percentile, rank, displayValue, displayRank
-
-#-------------------------------------FOR "ALL"-------------------------------------#
-# STAT: Top3_5_10, Top6_12_25 
-# VALUE:  value, displayValue
-
-# STAT: MinutesPlayed, KPM, KPG, AvgTimePlayed, ScorePerMatch, ScorePerMin
-# VALUE:  value, percentile, displayValue
- 
-# STAT: Score, Top1, KD, WinRatio, Matches, Kills, MinutesPlayed, 
-# VALUE:  value, percentile, rank, displayValue
-
-# STAT: TRNRating
-# VALUE:  value, percentile, rank, displayValue, displayRank
-
-get_player_data("stillsheisty")
+player_data = get_player_data("stillsheisty")
+print(player_data)
+player_stats = get_player_stats(player_data, category="stats", ranked=False)
+print(player_stats)
