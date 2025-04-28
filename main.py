@@ -8,7 +8,11 @@ import time
 
 
 
-def get_player_data(username):
+def get_player_data(username=None):
+    if not username: 
+        print("Invalid username")
+        return None
+    
     url = f"https://fortnitetracker.com/profile/all/{username}" # get the url for the stattracker website
 
     chrome_options = Options()
@@ -37,30 +41,44 @@ def get_player_data(username):
         profile_raw = profile_raw.replace("undefined", "null")  # Fix invalid JS if necessary
         profile_data = json.loads(profile_raw)
 
-        # get_player_stat(profile_data, "all", "all", "KD", "Value")
-        # get_gamemode_stats(profile_data, platform=None, gamemode="all")
-        chosen_stats = get_player_stats(profile_data, category="stats", platform="preferred", gamemode="all", stat="lol", option=None)
-        print(chosen_stats)
+        return profile_data # return all of the profile data
      
     except Exception as e: # throw an error if there's a problem with the webpage
         print(f"Error: {e}")
         return 0, 0
 
     finally:
-        driver.quit()
+        driver.quit() # close the webbrowser instance
 
 # Function to get data about the user, such as ID, etc.
 #category: platformInfo, userInfo, metadata
-def get_player_info(profile_data, category=None,):
-    return
+def get_player_info(profile_data, category=None, data=None, value=None):
+    category_data = profile_data.get(category, []) #Get the data in the category
+    if not category_data: # If that isn't a valid category, return None
+        print(f"No category '{category}' found.")
+        return None
+    
+    if data is None: return category_data # If no data parameter is given, return the whole category.
+    category_values = category_data.get(data) #get the data section of the chosen category
+    
+    if not category_values: # If that isn't a valid category, return None
+        print(f"No category value '{value}' found.")
+        return None
+    
+    if value is None: return category_values # If no data parameter is given, return the whole category.
+    
+    return category_values[value] #return the value chosen.
 
 
 # Function to return the value of a specific stat given the platform, gamemode, stat, and option of that stat
-def get_player_stats(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode=None, stat=None, option=None):
+def get_player_stats(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode=None, data=None, option=None):
     
    # If you want to get only the stats for the user's preferred platform, use preferred for the platform parameter in the funtcion call
     if platform == "preferred":
         platform = profile_data["metadata"]["preferredInputId"]
+    
+    if season == "current":
+            season = profile_data["metadata"]["currentSeasonInfo"]["id"]
     
     stats_list = profile_data.get(category, [])  # get the stats section of the player profile
 
@@ -92,9 +110,9 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
 
 
 
-    if stat is None: return mode_stats # If no stat is given, return the full gamemode stats
+    if data is None: return mode_stats # If no stat is given, return the full gamemode stats
     for stats in mode_stats:            #otherwise, loop through the stat sections until we either find the intended stat or not
-        if stats["metadata"]["key"] == stat:
+        if stats["metadata"]["key"] == data:
             if option is not None:      # If the user didnt give an option for the stat (e.g. value, percentile, etc.), return all of that stat's data
                 return stats[option]
             else: return stats
@@ -104,7 +122,7 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
 
 # Category: stats (default), last7DaysStats, last30DaysStats
 
-# platform: None "all", "touch", "kbm", "gamepad", "preferred"
+# platform: None, "all", "touch", "kbm", "gamepad", "preferred"
 # gamemode: "all", "solo", "duos", "trios", "squads", "ltm"
 
 # Stats:
