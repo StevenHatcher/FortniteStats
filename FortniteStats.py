@@ -45,8 +45,8 @@ def get_player_data(username=None, maximize=False, auto_close=False, open_time=0
         return None
 
     finally:
-        time.sleep(open_time)  # optional: extra wait for full JavaScript rendering
         if auto_close is True:
+            time.sleep(open_time)  # optional: extra wait for full JavaScript rendering
             driver.quit() # close the webbrowser instance
 
 # Function to get data about the user, such as ID, etc.
