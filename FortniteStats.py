@@ -4,7 +4,7 @@ import re
 import json # Used to get the json data from the tracker website and extract info
 import time
 
-def get_player_data(username=None, maximize=False, wait_time=0):
+def get_player_data(username=None, maximize=False, close=False, open_time=0):
     if not username: 
         print("Invalid username")
         return None
@@ -45,8 +45,9 @@ def get_player_data(username=None, maximize=False, wait_time=0):
         return None
 
     finally:
-        time.sleep(wait_time)  # optional: extra wait for full JavaScript rendering
-        driver.quit() # close the webbrowser instance
+        time.sleep(open_time)  # optional: extra wait for full JavaScript rendering
+        if close is True:
+            driver.quit() # close the webbrowser instance
 
 # Function to get data about the user, such as ID, etc.
 def get_player_info(profile_data, category=None, data=None, value=None):    
