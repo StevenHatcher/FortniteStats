@@ -1,13 +1,13 @@
 # **FortniteStatLibrary**
- **Create to access and utilize the statistics of public accounts on fortnitetracker.com**
+ **Access and utilize the statistics of public accounts on fortnitetracker.com**
 
 The more info that is given to the functions, the more specific the the results will be. 
 For example, 
-- Function call: get_player_stats(profile_data, category="all", ranked=True, platform="all", season=None, gamemode="all", data="KD", option="value")
-- Example return: 0.61 (The player's K/D ratio across all platforms, gamemodes, and seasons.)
+- *Function call:* get_player_stats(profile_data, category="all", ranked=True, platform="all", season=None, gamemode="all", data="KD", option="value")
+- *Example return:* 0.61 (The player's K/D ratio across all platforms, gamemodes, and seasons.)
 <br>Alternatively:<br>
-- Function call: player_stats = get_player_stats(player_data, category="stats", ranked=False)
-- Example return: [every single unranked statistic for every gamemode and platform]
+- *Function call:* player_stats = get_player_stats(player_data, category="stats", ranked=False)
+- *Example return:* [every single unranked statistic for every gamemode and platform]
 
 # Functions:
 ## get_player_data()
