@@ -4,7 +4,7 @@ import re
 import json # Used to get the json data from the tracker website and extract info
 import time
 
-def get_player_data(username=None, maximize=False):
+def get_player_data(username=None, maximize=False, wait_time=0):
     if not username: 
         print("Invalid username")
         return None
@@ -32,7 +32,7 @@ def get_player_data(username=None, maximize=False):
 
         if not profile_json_text: # if the profile can't be found in the json, print an error and return default 0,0
             print("Could not find profile JSON in page.")
-            return 
+            return None
 
         profile_raw = profile_json_text.group(1) 
         profile_raw = profile_raw.replace("undefined", "null")  # Fix invalid JS if necessary
@@ -42,9 +42,10 @@ def get_player_data(username=None, maximize=False):
      
     except Exception as e: # throw an error if there's a problem with the webpage
         print(f"Error: {e}")
-        return 0, 0
+        return None
 
     finally:
+        time.sleep(wait_time)  # optional: extra wait for full JavaScript rendering
         driver.quit() # close the webbrowser instance
 
 # Function to get data about the user, such as ID, etc.
@@ -87,8 +88,9 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
         if section.get("platform") == platform and section.get("season") == season and section.get("isCompetitive") == ranked:
             target_section = section # if the current section is the section of the platform we're looking for, we're done looking
             break
-
-    if not target_section: # If there aren't any sections for the fiven platform, print a message saying so and retunr
+    
+    # If there aren't any sections for the given platform, print a message saying so and return
+    if not target_section: 
         print(f"No stats found for platform = {platform}, season = {season}, isCompetitive? = {ranked}")
         return None
 
@@ -101,19 +103,18 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
     if gamemode is None: return stats_block # If no gamemode is given, return the full stats block for the given platform
 
 
-
-    mode_stats = stats_block.get(gamemode) # If a gamemode was given in function call, get the stats for that gamemode
+    # If a gamemode was given in function call, get the stats for that gamemode
+    mode_stats = stats_block.get(gamemode) 
     if not mode_stats:
         print(f"No gamemode '{gamemode}' found for platform = {platform}")
         return None
 
-
-
-    if data is None: return mode_stats # If no stat is given, return the full gamemode stats
+    # If no stat is given, return the full gamemode stats
+    if data is None: return mode_stats 
     for stats in mode_stats:            #otherwise, loop through the stat sections until we either find the intended stat or not
         if stats["metadata"]["key"] == data:
             if option is not None:      # If the user didnt give an option for the stat (e.g. value, percentile, etc.), return all of that stat's data
                 return stats[option]
             else: return stats
 
-    return
+    return None
