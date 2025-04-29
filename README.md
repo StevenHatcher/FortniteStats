@@ -39,13 +39,13 @@ Function to return the value of a specific stat given the platform, gamemode, st
 
 - <ins>option</ins>: (varies by {data})<br>
     *DATA*: "KD", "WinRatio", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMin"<br>
-    *VALUE*:  "value", "percentile", "displayValue"<br>
+        *VALUE*:  "value", "percentile", "displayValue"<br>
 
     *DATA*: "Score", "Top1", "Top3", "Top6", "Top10", "Top12", "Top25", "Matches", "Kills", "ScorePerMatch"<br>
-    *VALUE*:  "value", "percentile", "rank", "displayValue"<br>
+        *VALUE*:  "value", "percentile", "rank", "displayValue"<br>
 
     *DATA*: "TRNRating"<br>
-    *VALUE*:  "value", "percentile", "rank", "displayValue", "displayRank"<br>
+        *VALUE*:  "value", "percentile", "rank", "displayValue", "displayRank"<br>
     **Example:** get_player_stats(profile_data, category="all", ranked=True, platform="all", season=None, gamemode="all", data="KD", option="value")
 
 
