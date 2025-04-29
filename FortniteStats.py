@@ -4,10 +4,6 @@ import re
 import json # Used to get the json data from the tracker website and extract info
 import time
 
-
-
-
-
 def get_player_data(username=None, maximize=False):
     if not username: 
         print("Invalid username")
@@ -121,8 +117,3 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
             else: return stats
 
     return
-
-player_data = get_player_data("stillsheisty")
-print(player_data)
-player_stats = get_player_stats(player_data, category="stats", ranked=False)
-print(player_stats)
