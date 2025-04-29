@@ -31,19 +31,21 @@ Function to return the value of a specific stat given the platform, gamemode, st
 - <ins>platform</ins>: None (default), "all", "touch", "kbm", "gamepad", "preferred" (gives data for player's preferred platform)
 - <ins>season</ins>: None (default), [any number], "current" (gives current season)
 - <ins>gamemode</ins>: None (default), "all", "solo", "duos", "trios", "squads", "ltm"
-- <ins>data</ins>: (Varies by {gamemode})
-    - For "all" gamemode: "TRNRating", "Score", "Top1", "Top3", "Top5", "Top6", "Top10", "Top12", "Top25", "KD", "WinRatio", "Matches", "Kills", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMatch", "ScorePerMin"
-    - For "solo", "duos", "trios", "squads", "ltm" gamemodes: "Score", "Top1", "KD", "WinRatio", "Matches", "Kills", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMatch", "ScorePerMin", "Top3_5_10", "TRNRating"
+- <ins>data</ins>: (Varies by {gamemode})<br>
+    - For "all" gamemode:<br>
+        - "TRNRating", "Score", "Top1", "Top3", "Top5", "Top6", "Top10", "Top12", "Top25", "KD", "WinRatio", "Matches", "Kills", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMatch", "ScorePerMin"
+    - For "solo", "duos", "trios", "squads", "ltm" gamemodes: <br>
+        - "Score", "Top1", "KD", "WinRatio", "Matches", "Kills", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMatch", "ScorePerMin", "Top3_5_10", "TRNRating"<br>
 
-- <ins>option</ins>: (varies by {data})
+- <ins>option</ins>: (varies by {data})<br>
     *DATA*: "KD", "WinRatio", "MinutesPlayed", "KPM", "KPG", "AvgTimePlayed", "ScorePerMin"<br>
-    *VALUE*:  "value", "percentile", "displayValue"
+    *VALUE*:  "value", "percentile", "displayValue"<br>
 
     *DATA*: "Score", "Top1", "Top3", "Top6", "Top10", "Top12", "Top25", "Matches", "Kills", "ScorePerMatch"<br>
-    *VALUE*:  "value", "percentile", "rank", "displayValue"
+    *VALUE*:  "value", "percentile", "rank", "displayValue"<br>
 
     *DATA*: "TRNRating"<br>
-    *VALUE*:  "value", "percentile", "rank", "displayValue", "displayRank"
+    *VALUE*:  "value", "percentile", "rank", "displayValue", "displayRank"<br>
     **Example:** get_player_stats(profile_data, category="all", ranked=True, platform="all", season=None, gamemode="all", data="KD", option="value")
 
 
