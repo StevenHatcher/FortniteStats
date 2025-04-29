@@ -61,3 +61,8 @@ This function will return info about the player
     - None (default)
 **Returns:** JSON data of the given player
 **Example**: player_info = get_player_info(profile_data, category="platformInfo", data="platformUserId")
+
+# **Installation**
+Note: Requires Selenium (pip install selenium)
+1. Clone this repository into your project
+2. Add the inclusion to the file you are working on:    from FortniteStat include *
