@@ -4,7 +4,7 @@ import re
 import json # Used to get the json data from the tracker website and extract info
 import time
 
-def get_player_data(username=None, maximize=False, auto_close=False, open_time=0):
+def get_player_data(username=None, maximize=True, auto_close=True, open_time=0):
     if not username: 
         print("Invalid username")
         return None
@@ -48,6 +48,7 @@ def get_player_data(username=None, maximize=False, auto_close=False, open_time=0
         if auto_close is True:
             time.sleep(open_time)  # optional: extra wait for full JavaScript rendering
             driver.quit() # close the webbrowser instance
+            
 
 # Function to get data about the user, such as ID, etc.
 def get_player_info(profile_data, category=None, data=None, value=None):    
@@ -119,3 +120,42 @@ def get_player_stats(profile_data, category="stats", ranked=False,platform=None,
             else: return stats
 
     return None
+
+def get_player_kd(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode="all", data=None, option=None):
+    return get_player_stats(profile_data, category="stats", ranked=ranked ,platform=platform, season=season, gamemode=gamemode, data="KD", option="value")
+    
+def get_player_playtime_minutes(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode="all", data=None, option=None):
+    return get_player_stats(profile_data, category="stats", ranked=ranked ,platform=platform, season=season, gamemode=gamemode, data="MinutesPlayed", option="value")
+
+def get_player_playtime_hours(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode="all", data=None, option=None):
+    return round(get_player_stats(profile_data, category="stats", ranked=ranked ,platform=platform, season=season, gamemode=gamemode, data="MinutesPlayed", option="value") / 60, 2)
+
+# Get player rank
+def get_player_playtime_hours(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode="all", data=None, option=None):
+    return round(get_player_stats(profile_data, category="stats", ranked=ranked ,platform=platform, season=season, gamemode=gamemode, data="MinutesPlayed", option="value") / 60, 2)
+
+# Get player kills
+def get_player_playtime_kills(profile_data, category="stats", ranked=False,platform=None, season=None, gamemode="all", data=None, option=None):
+    return get_player_stats(profile_data, category="stats", ranked=ranked ,platform=platform, season=season, gamemode=gamemode, data="MinutesPlayed", option="value")
+
+def get_player_latest_rank(profile_data):
+    # segments -> stats group - > latest rank => display value
+    segments = get_player_info(profile_data, "segments")
+    rank = get_player_info(segments, "stats", "latestRank", "displayValue")
+    return rank
+    
+def get_player_peak_rank():
+    # segments -> stats group - > latest rank => display value
+    get_player_data()
+    return
+
+my_data = get_player_data(username="stillsheisty", maximize=False)
+rank = get_player_latest_rank(my_data)
+print(rank)
+
+# TODO:Ensure that default values work
+
+# Break apart get_player_info into functions that are easier to use
+
+# Find a way to pull the JSON without opening a chromedriver instance (use requests with headers?)
+
